@@ -7,8 +7,25 @@ export const fetchDishes = () => (dispatch) => {
     dispatch(dishesLoading(true));
 
     return fetch(baseUrl + "dishes")
+    .then(response=>{
+        if(response.ok){
+            return response
+        }
+        else
+        {
+            var error = new Error("Error "+ response.status, + " : ",+response.text);
+            error.response=response;
+            throw error;
+        }
+    },
+    error =>{
+        var errmess=new Error (error.message)
+        throw errmess
+    }
+    )
     .then(response=>response.json())
-    .then(dishes =>dispatch(addDishes(dishes)));
+    .then(dishes =>dispatch(addDishes(dishes)))
+    .catch(error =>dispatch(dishesFailed(error.message)))
 }
 
 export const dishesLoading = () => ({
@@ -40,8 +57,25 @@ export const addComment = (dishId,rating,author,comment) =>({
 
 export const fetchComments = () => (dispatch) =>{
     return fetch(baseUrl+"comments")
+    .then(response=>{
+        if(response.ok){
+            return response
+        }
+        else
+        {
+            var error = new Error("Error "+ response.status, + " : ",+response.text);
+            error.response=response;
+            throw error;
+        }
+    },
+    error =>{
+        var errmess=new Error (error.message)
+        throw errmess
+    }
+    )
     .then(response=>response.json())
-    .then(data=>dispatch(addComments(data)));
+    .then(data=>dispatch(addComments(data)))
+    .catch(error =>dispatch(commentsFailed(error.message)))
 }
 
 export const addComments= (comments) =>({
@@ -58,8 +92,25 @@ export const fetchPromos = () => (dispatch) => {
 
     dispatch(promosLoading());
      return fetch(baseUrl+"promotions")
+     .then(response=>{
+        if(response.ok){
+            return response
+        }
+        else
+        {
+            var error = new Error("Error "+ response.status, + " : ",+response.text);
+            error.response=response;
+            throw error;
+        }
+    },
+    error =>{
+        var errmess=new Error (error.message)
+        throw errmess
+    }
+    )
      .then(response=>response.json())
      .then(data=>dispatch(addPromos(data)))
+     .catch(error =>dispatch(promosFailed(error.message)))
 }
 
 export const promosLoading = () =>({
