@@ -1,21 +1,25 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { baseUrl } from '../shared/baseUrl';
+import {  Fade, Stagger } from 'react-animation-components';
 
 function RenderLeaders(leaders)
 {
     const elements=[]
     
-    leaders.forEach(leader => {
+    leaders?.forEach(leader => {
             
             const leaderDetails = leader.leader
             elements.push(
                 <div className="col-12 mt-5">
 
-
+                <Stagger in>
                 <Media tag="ul">
+                    <Fade in>
+                        
                     <Media left middle >
-                        <Media object src={`${leaderDetails.image}`} alt='Leader' />
+                        <Media object src={`${baseUrl + leaderDetails.image}`} alt='Leader' />
                         
                     </Media>
                     <Media body className="ml-5">
@@ -29,8 +33,9 @@ function RenderLeaders(leaders)
                      <p>{leaderDetails.description}</p>
                     
                     </Media>
-                    
+                    </Fade>
                 </Media>
+                </Stagger>
                 </div>
             )
 
@@ -41,14 +46,14 @@ function RenderLeaders(leaders)
 }
 
 function About(props) {
-
-    const leaders = props.leaders.map((leader) => {
+   
+    const lead = props.leaders?.map((leader) => {
         return (
              {leader}
         );
     });
    
-
+    
 
     return(
         <div className="container">
@@ -106,7 +111,7 @@ function About(props) {
                 </div>
                 <div className="col-12">
                     <Media list>
-                        {RenderLeaders(leaders)}
+                        {RenderLeaders(lead)}
                         
                     </Media>
                 </div>

@@ -6,7 +6,7 @@ import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 
     function RenderMenuItem ({dish}) {
-        console.log("In MenuComponent", dish.image)
+        
 
         return (
             <Card>

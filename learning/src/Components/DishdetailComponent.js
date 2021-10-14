@@ -1,28 +1,30 @@
 
 import React, { Component } from "react"
 import {Card, CardImg, CardText, CardBody,CardTitle, Breadcrumb, BreadcrumbItem, Row, Label, Modal, ModalBody, Button, ModalHeader} from 'reactstrap';
-import Moment from 'moment';
+
 import { LocalForm, Errors, Control } from "react-redux-form";
 import { Loading } from "./LoadingComponent";
 import { Link } from "react-router-dom";
 import { baseUrl } from '../shared/baseUrl';
-
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 function RenderDish(dish) {
-    console.log("In dishDetail component " ,dish);
+   
     if (dish != null)
-        return (
-            <Card>
-                <CardImg top src={baseUrl + dish.dish.image} alt={dish.name} />
-                <CardBody>
-
-
-                    <CardTitle>{dish.dish.name}</CardTitle>
-                    <CardText>{dish.dish.description}</CardText>
-
-
-                </CardBody>
-            </Card>
+        return ( <FadeTransform
+            in
+            transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}>
+        <Card>
+            <CardImg top src={baseUrl + dish.dish.image} alt={dish.name} />
+            <CardBody>
+                <CardTitle>{dish.name}</CardTitle>
+                <CardText>{dish.description}</CardText>
+            </CardBody>
+        </Card>
+        </FadeTransform>
+        
         );
     else
         return (
@@ -30,25 +32,30 @@ function RenderDish(dish) {
         );
 }
 
-function RenderComments({comments, dishId,addComment}) {
+function RenderComments({comments, dishId,postComment}) {
     
     
         return(
            <div>
                <h4>Comments</h4>
 
-               {comments.map(comment => (
-                   <div>
-                       <div>
+              
+                   <Stagger in>
+                   {comments.map((comment) => {
+                       return (
+                           <Fade in>
+                           <li key={comment.id}>
+                           <p>{comment.comment}</p>
+                           <p>-- {comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
+                           </li>
+                           </Fade>
+                       );
+                   })}
+                   </Stagger>
        
-                           <p>{comment?.comment}</p>
-                           <p>--{comment?.author},{Moment(comment?.date).format('MM d,YYYY')}</p>
-       
-                       </div>
-                   </div>
-       
-               ))}
-               <CommentForm dishId={dishId} addComment={addComment} />
+               ))
+              
+               <CommentForm dishId={dishId} postComment={postComment} />
            </div>
         );
         
@@ -81,7 +88,7 @@ class CommentForm extends Component {
     
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
     }
 
     
@@ -213,7 +220,7 @@ class CommentForm extends Component {
                             
                         </div>
                         <div className="col-12 col-md-5">
-                        <RenderComments comments={props.comments} addComment={props.addComment} dishId={props.dish.id} />
+                        <RenderComments comments={props.comments} postComment={props.postComment} dishId={props.dish.id} />
     
                             
     

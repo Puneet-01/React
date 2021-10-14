@@ -3,6 +3,7 @@ import { Card, CardImg, CardBody, CardSubtitle, CardText, CardTitle } from 'reac
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
 import { dishesFailed } from '../redux/ActionCreators';
+import {FadeTransform} from 'react-animation-components';
 function RenderCard({item,isLoading,ErrMess})
 {
   if (isLoading)
@@ -17,23 +18,27 @@ function RenderCard({item,isLoading,ErrMess})
   else
   {
 
-    return(
+    return(<FadeTransform
+      in
+      transformProps={{
+          exitTransform: 'scale(0.5) translateY(-50%)'
+      }}>
       <Card>
-         <CardImg src={ baseUrl + item?.image} alt={item?.name} />
-         {console.log("Image ",baseUrl + item?.image)}
-              <CardBody>
-              <CardTitle>{item?.name}</CardTitle>
-              {item?.designation ? <CardSubtitle>{item.designation}</CardSubtitle> : null }
-              <CardText>{item?.description}</CardText>
-              </CardBody>
+          <CardImg src={baseUrl + item?.image} alt={item?.name} />
+          <CardBody>
+          <CardTitle>{item?.name}</CardTitle>
+          {item?.designation ? <CardSubtitle>{item?.designation}</CardSubtitle> : null }
+          <CardText>{item?.description}</CardText>
+          </CardBody>
       </Card>
+  </FadeTransform>
     )
   }
 }
 
 
 function Home(props) {
-  console.log("In home ",props);
+ 
     return(
       <div className="container">
         <div className="row align-items-start">
